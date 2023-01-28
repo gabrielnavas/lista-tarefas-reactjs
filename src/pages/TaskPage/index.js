@@ -52,8 +52,15 @@ export const TaskPage = () => {
     }
   }
 
-  const onClickButtonRemove = taskId => {
-    setTasks(tasks.filter(t => t.id !== taskId))
+  const onClickButtonRemove = async taskId => {
+    const result = await taskAPI.deleteTaskById(taskId)
+    if (result.success) {
+      const newTasks = tasks.filter(t => t.id !== taskId)
+      setTasks(newTasks)
+    } else {
+      setMessageError('Tente novamente mais tarde')
+      throw new Error(result.message)
+    }
   }
 
   const onClickButtonUpdate = task => {
@@ -63,8 +70,8 @@ export const TaskPage = () => {
   }
 
   const onClickButtonFinishUpdate = async e => {
-    const resultGet = await taskAPI.getTaskByName(taskOldToUpdate.name)
-    if (resultGet.success && taskOldToUpdate.id !== resultGet.task.id) {
+    const taskAlreadyExists = tasks.findIndex(task => task.name === taskName) >= 0
+    if (taskAlreadyExists) {
       setMessageError('Tarefa já existe com esse nome.')
     } else {
       const resultUpdate = await taskAPI.updateTask(taskOldToUpdate.id, { name: taskName })
@@ -75,6 +82,7 @@ export const TaskPage = () => {
         setTasks(newTasks)
         setIsUpdating(false)
         setTaskName('')
+        setTaskOldToUpdate({})
       } else {
         setMessageError(resultUpdate.message)
         throw new Error(resultUpdate.message)

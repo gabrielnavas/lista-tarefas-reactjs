@@ -127,7 +127,7 @@ export const UseTaskAPI = () => ({
   },
   deleteTaskById: async taskId => {
     try {
-      const url = `${API_ENDPOINT}/api/task/${taskId}`
+      const url = `${API_ENDPOINT}/api/tasks/${taskId}`
       const response = await fetch(url, {
         method: 'DELETE',
         headers: {
@@ -142,7 +142,7 @@ export const UseTaskAPI = () => ({
       } else {
         return {
           success: true,
-          message: 'Tarefa removida.'
+          message: 'Tarefa deletada.'
         }
       }
     } catch (err) {
