@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types'
-
 export const ButtonConfirmTask = ({
   isUpdating,
   onClickButtonFinishUpdate,
@@ -15,10 +13,4 @@ export const ButtonConfirmTask = ({
       {isUpdating ? 'Atualizar' : 'Inserir'}
     </button>
   )
-}
-
-ButtonConfirmTask.propTypes = {
-  isUpdating: PropTypes.bool,
-  onClickButtonFinishUpdate: PropTypes.func,
-  onClickButtonAddTasks: PropTypes.func
 }

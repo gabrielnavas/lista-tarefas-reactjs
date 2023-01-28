@@ -1,6 +1,3 @@
-import PropTypes from 'prop-types'
-import { useEffect } from 'react'
-
 import { Task } from '../Task'
 
 export const Tasks = ({
@@ -8,17 +5,13 @@ export const Tasks = ({
   onClickButtonRemove,
   onClickButtonUpdate
 }) => {
-  useEffect(() => {
-
-  }, [tasks])
-
   return (
     <ul>
       {
-        tasks.map((taskName, index) =>
+        tasks.map((task, index) =>
           <Task
             key={index}
-            name={taskName}
+            task={task}
             onClickRemove={onClickButtonRemove}
             onClickUpdate={onClickButtonUpdate}
           />
@@ -26,10 +19,4 @@ export const Tasks = ({
       }
     </ul>
   )
-}
-
-Tasks.propTypes = {
-  tasks: PropTypes.array,
-  onClickButtonRemove: PropTypes.func,
-  onClickButtonUpdate: PropTypes.func
 }

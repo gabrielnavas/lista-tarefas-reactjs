@@ -1,18 +1,10 @@
-import PropType from 'prop-types'
-
-export const InputTask = ({ task, setTask, inputRef }) => {
+export const InputTask = ({ taskName, setTaskName, inputRef }) => {
   return (
     <input
       type="text"
       ref={inputRef}
-      onChange={e => setTask(e.target.value)}
-      value={task}
+      onChange={e => setTaskName(e.target.value)}
+      value={taskName}
     />
   )
-}
-
-InputTask.propTypes = {
-  task: PropType.string,
-  setTask: PropType.any,
-  inputRef: PropType.any
 }

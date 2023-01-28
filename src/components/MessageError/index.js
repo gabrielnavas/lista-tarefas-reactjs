@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types'
-
 import './index.css'
 
 export const MessageError = ({ message }) => {
@@ -8,8 +6,4 @@ export const MessageError = ({ message }) => {
       {message}
     </div>
   )
-}
-
-MessageError.propTypes = {
-  message: PropTypes.string
 }
