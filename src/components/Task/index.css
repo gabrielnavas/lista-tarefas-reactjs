@@ -1,0 +1,7 @@
+.container__task {
+  display: flex;
+  justify-content: space-between;
+
+  color: #4A5759;
+  font-weight: bold;
+}
