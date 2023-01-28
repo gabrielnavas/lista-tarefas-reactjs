@@ -7,7 +7,7 @@ export const UseTaskAPI = () => ({
       const url = `${API_ENDPOINT}/api/tasks`
       const body = { name }
       const response = await fetch(url, {
-        method: 'post',
+        method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
@@ -36,21 +36,22 @@ export const UseTaskAPI = () => ({
     }
   },
   updateTask: async (taskId, { name }) => {
+    console.log(taskId, { name })
     try {
-      const url = `${API_ENDPOINT}/tasks/task/${taskId}`
+      const url = `${API_ENDPOINT}/api/tasks/${taskId}`
       const body = { name }
       const response = await fetch(url, {
-        method: 'patch',
+        method: 'PATCH',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(body)
       })
-      if (response.status !== 400 || response.status !== 204) {
+      if (response.status !== 204) {
         return {
           success: false,
-          message: 'Tarefa não encontrada'
+          message: 'Tente novamente mais tarde.'
         }
       } else {
         return {
@@ -65,11 +66,11 @@ export const UseTaskAPI = () => ({
       }
     }
   },
-  getTaskById: async taskId => {
+  getTaskByName: async taskName => {
     try {
-      const url = `${API_ENDPOINT}/api/tasks/${taskId}`
+      const url = `${API_ENDPOINT}/api/tasks/name/${taskName}`
       const response = await fetch(url, {
-        method: 'get',
+        method: 'GET',
         headers: {
           Accept: 'application/json'
         }
@@ -98,7 +99,7 @@ export const UseTaskAPI = () => ({
     try {
       const url = `${API_ENDPOINT}/api/tasks`
       const response = await fetch(url, {
-        method: 'get',
+        method: 'GET',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
@@ -128,7 +129,7 @@ export const UseTaskAPI = () => ({
     try {
       const url = `${API_ENDPOINT}/api/task/${taskId}`
       const response = await fetch(url, {
-        method: 'delete',
+        method: 'DELETE',
         headers: {
           Accept: 'application/json'
         }

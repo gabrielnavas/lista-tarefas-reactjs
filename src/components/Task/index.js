@@ -10,7 +10,7 @@ export const Task = ({ task, onClickRemove, onClickUpdate }) => {
             Deletar
         </button>
         <button
-          onClick={() => onClickUpdate(task.id)}>
+          onClick={() => onClickUpdate(task)}>
             Atualizar
         </button>
       </span>

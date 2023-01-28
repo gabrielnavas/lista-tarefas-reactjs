@@ -12,11 +12,11 @@ import { UseTaskAPI } from '../../api/task'
 export const TaskPage = () => {
   const taskAPI = UseTaskAPI()
 
-  const [messageSuccess, setMessageSuccess] = useState('')
+  const [messageError, setMessageError] = useState('')
   const [tasks, setTasks] = useState([])
 
   const [taskName, setTaskName] = useState('')
-  const [taskOldToUpdate, setTaskOldToUpdate] = useState('')
+  const [taskOldToUpdate, setTaskOldToUpdate] = useState({})
 
   const [isUpdating, setIsUpdating] = useState(false)
 
@@ -32,21 +32,21 @@ export const TaskPage = () => {
   const onClickButtonAddTasks = async e => {
     const existsTask = (tasks.findIndex(t => t.name === taskName) >= 0)
     if (existsTask) {
-      setMessageSuccess('Tarefa já existente.')
+      setMessageError('Tarefa já existente.')
     } else if (!taskName) {
-      setMessageSuccess('Tarefa está vazia.')
+      setMessageError('Tarefa está vazia.')
     } else {
       const result = await taskAPI.createTask({
         name: taskName
       })
       if (result.success) {
-        setMessageSuccess('')
+        setMessageError('')
         setTaskName('')
         inputRef.current.focus()
         const newTask = result.task
         setTasks([newTask, ...tasks])
       } else {
-        setMessageSuccess('Tente novamente mais tarde.')
+        setMessageError('Tente novamente mais tarde.')
         throw new Error(result.message)
       }
     }
@@ -56,19 +56,30 @@ export const TaskPage = () => {
     setTasks(tasks.filter(t => t.id !== taskId))
   }
 
-  const onClickButtonUpdate = taskName => {
+  const onClickButtonUpdate = task => {
     setIsUpdating(true)
-    setTaskName(taskName)
-    setTaskOldToUpdate(taskName)
+    setTaskName(task.name)
+    setTaskOldToUpdate(task)
   }
 
-  const onClickButtonFinishUpdate = e => {
-    const indexTask = tasks.findIndex(t => t === taskOldToUpdate)
-    const newTasks = [...tasks]
-    newTasks[indexTask] = taskName
-    setTasks(newTasks)
-    setIsUpdating(false)
-    setTaskName('')
+  const onClickButtonFinishUpdate = async e => {
+    const resultGet = await taskAPI.getTaskByName(taskOldToUpdate.name)
+    if (resultGet.success && taskOldToUpdate.id !== resultGet.task.id) {
+      setMessageError('Tarefa já existe com esse nome.')
+    } else {
+      const resultUpdate = await taskAPI.updateTask(taskOldToUpdate.id, { name: taskName })
+      if (resultUpdate.success) {
+        const taskIndex = tasks.findIndex(t => t.id === taskOldToUpdate.id)
+        const newTasks = [...tasks]
+        newTasks[taskIndex].name = taskName
+        setTasks(newTasks)
+        setIsUpdating(false)
+        setTaskName('')
+      } else {
+        setMessageError(resultUpdate.message)
+        throw new Error(resultUpdate.message)
+      }
+    }
   }
 
   return (
@@ -89,7 +100,7 @@ export const TaskPage = () => {
           onClickButtonAddTasks={onClickButtonAddTasks}
           onClickButtonFinishUpdate={onClickButtonFinishUpdate}
         />
-        <MessageError message={messageSuccess} />
+        <MessageError message={messageError} />
       </FormTask>
     </Card>
   )
